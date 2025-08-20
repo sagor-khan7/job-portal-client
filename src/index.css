@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --font-exo: "Exo 2", sans-serif;
+  --font-work: "Work Sans", sans-serif;
+}
