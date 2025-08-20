@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 const Signup = () => {
+  // Use auth context
+  const { signupUser } = useContext(AuthContext);
+
   // State to manage the password input value
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -58,15 +62,26 @@ const Signup = () => {
     e.preventDefault();
     setErrorMessage("");
 
-    if (passwordRegex.test(password)) {
-      console.log("Email:", email);
-      console.log("Password:", password);
-      // You can add your sign-up logic (e.g., API call) here
-    } else {
+    if (!passwordRegex.test(password)) {
       setErrorMessage(
         "Password must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
       );
+      return;
     }
+
+    // Sign up login
+    signupUser(email, password)
+      .then((result) => {
+        console.log(result.user);
+        e.target.reset();
+        setEmail("");
+        setPassword("");
+        setPasswordStrength("");
+      })
+      .catch((error) => {
+        const errorMessage = error.code;
+        setErrorMessage(errorMessage.split("/")[1]);
+      });
   };
 
   return (
