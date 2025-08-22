@@ -1,11 +1,15 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import logo from "../../assets/logo.svg";
 import { IoPersonCircleOutline } from "react-icons/io5";
-import { FiMenu, FiX } from "react-icons/fi"; // ✅ React Icons
+import { FiMenu, FiX } from "react-icons/fi";
+import AuthContext from "../../context/AuthContext";
+import avatar from "../../assets/avatar.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, signoutUser } = useContext(AuthContext);
+  console.log("user from nav", user);
 
   const navLinks = [
     { path: "/", label: "Home" },
@@ -39,29 +43,75 @@ const Navbar = () => {
           ))}
         </nav>
 
-        {/* Desktop Auth Buttons */}
-        <div className="hidden md:flex space-x-3">
-          <NavLink
-            to="/signin"
-            className="relative px-4 py-2 flex items-center gap-2 text-lg border border-black overflow-hidden group"
-          >
-            <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white">
-              <IoPersonCircleOutline />
-              Sign In
-            </span>
-            <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
-          </NavLink>
-
-          <NavLink
-            to="/signup"
-            className="relative px-4 py-2 flex items-center gap-2 text-lg border border-black overflow-hidden group bg-black text-white"
-          >
-            <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-black">
-              <IoPersonCircleOutline />
-              Sign Up
-            </span>
-            <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
-          </NavLink>
+        {/* Desktop Auth Buttons and Profile */}
+        <div className="hidden md:flex space-x-3 items-center">
+          {user ? (
+            // Profile dropdown for authenticated users
+            <div className="relative group">
+              {/* Profile image with conditional source */}
+              <img
+                className="w-12 h-12 p-1 border-2 border-black rounded-full cursor-pointer"
+                src={user.photoURL || avatar}
+                alt="User Avatar"
+              />
+              {/* Dropdown menu on hover */}
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform scale-95 group-hover:scale-100">
+                <div>
+                  {/* Update Profile link */}
+                  <NavLink
+                    to="/update-profile"
+                    className="relative px-4 py-2 flex items-center gap-2 text-lg border border-black overflow-hidden group"
+                  >
+                    <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white">
+                      Update Profile
+                      <IoPersonCircleOutline />
+                    </span>
+                    <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
+                  </NavLink>
+                  {/* Sign out button */}
+                  {/* <button
+                    onClick={() => signoutUser()}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Sign Out
+                  </button> */}
+                  <button
+                    onClick={() => signoutUser()}
+                    className="relative px-4 py-2 flex items-center w-full gap-2 text-lg border border-black overflow-hidden group"
+                  >
+                    <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-black">
+                      <IoPersonCircleOutline />
+                      Sign Out
+                    </span>
+                    <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Sign In and Sign Up links for unauthenticated users
+            <>
+              <NavLink
+                to="/signin"
+                className="relative px-4 py-2 flex items-center gap-2 text-lg border border-black overflow-hidden group"
+              >
+                <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white">
+                  <IoPersonCircleOutline />
+                  Sign In
+                </span>
+                <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
+              </NavLink>
+              {/* <NavLink
+                to="/signup"
+                className="relative px-4 py-2 flex items-center gap-2 text-lg border border-black overflow-hidden group bg-black text-white"
+              >
+                <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-black">
+                  Sign Up
+                </span>
+                <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
+              </NavLink> */}
+            </>
+          )}
         </div>
 
         {/* Mobile Hamburger */}
@@ -103,31 +153,57 @@ const Navbar = () => {
             </NavLink>
           ))}
 
-          {/* Mobile Auth Buttons */}
+          {/* Mobile Auth Buttons and Profile */}
           <div className="flex flex-col gap-2 pt-3">
-            <NavLink
-              to="/signin"
-              className="relative px-4 py-2 flex items-center justify-center gap-2 text-lg border border-black overflow-hidden group"
-              onClick={() => setIsOpen(false)}
-            >
-              <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white">
-                <IoPersonCircleOutline />
-                Sign In
-              </span>
-              <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
-            </NavLink>
-
-            <NavLink
-              to="/signup"
-              className="relative px-4 py-2 flex items-center justify-center gap-2 text-lg border border-black overflow-hidden group bg-black text-white"
-              onClick={() => setIsOpen(false)}
-            >
-              <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-black">
-                <IoPersonCircleOutline />
-                Sign Up
-              </span>
-              <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
-            </NavLink>
+            {user ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <img
+                    className="w-10 h-10 p-1 border-2 border-black rounded-full"
+                    src={user.photoURL || avatar}
+                    alt="User Avatar"
+                  />
+                  <div className="text-gray-700 text-lg font-bold">
+                    {user.email}
+                  </div>
+                </div>
+                <NavLink
+                  to="/update-profile"
+                  className="relative px-4 py-2 flex justify-center items-center gap-2 text-lg border border-black overflow-hidden group"
+                >
+                  <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white">
+                    Update Profile
+                    <IoPersonCircleOutline />
+                  </span>
+                  <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
+                </NavLink>
+                <button
+                  onClick={() => {
+                    signoutUser();
+                    setIsOpen(false);
+                  }}
+                  className="relative px-4 py-2 flex justify-center items-center gap-2 text-lg border border-black overflow-hidden group"
+                >
+                  <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white ">
+                    <IoPersonCircleOutline />
+                    Sign Out
+                  </span>
+                  <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
+                </button>
+              </>
+            ) : (
+              <NavLink
+                to="/signin"
+                className="relative px-4 py-2 flex items-center justify-center gap-2 text-lg border border-black overflow-hidden group"
+                onClick={() => setIsOpen(false)}
+              >
+                <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white">
+                  <IoPersonCircleOutline />
+                  Sign In
+                </span>
+                <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 ease-out"></span>
+              </NavLink>
+            )}
           </div>
         </nav>
       </div>
