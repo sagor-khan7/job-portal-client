@@ -1,12 +1,17 @@
 import { useContext, useState } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 
 const Signin = () => {
   // Use auth context
   const { signinUser } = useContext(AuthContext);
+
+  // Get location
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state || "/";
 
   // State to manage the password input value
   const [password, setPassword] = useState("");
@@ -29,6 +34,7 @@ const Signin = () => {
         e.target.reset();
         setEmail("");
         setPassword("");
+        navigate(from);
       })
       .catch((error) => {
         const errorMessage = error.code;

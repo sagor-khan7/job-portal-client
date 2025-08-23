@@ -9,7 +9,6 @@ import avatar from "../../assets/avatar.png";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, signoutUser } = useContext(AuthContext);
-  console.log("user from nav", user);
 
   const navLinks = [
     { path: "/", label: "Home" },

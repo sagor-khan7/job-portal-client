@@ -1,9 +1,16 @@
+import Banner from "./Banner";
+import HotJobs from "./HotJobs";
+
 const Home = () => {
   return (
-    <div>
-      <h1>Home page</h1>
-    </div>
+    <section>
+      <div>
+        <Banner />
+        <HotJobs />
+      </div>
+    </section>
   );
 };
 
 export default Home;
+
