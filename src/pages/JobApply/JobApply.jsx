@@ -1,10 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
 
 const JobApply = () => {
   const { id } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
   //   console.log(id, user);
 
   const handleSubmit = (e) => {
@@ -35,6 +36,7 @@ const JobApply = () => {
         if (data.insertedId) {
           Swal.fire("Success!");
           form.reset();
+          navigate("/myApplications");
         }
       });
   };
