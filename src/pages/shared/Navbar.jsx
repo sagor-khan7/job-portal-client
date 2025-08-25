@@ -13,7 +13,7 @@ const Navbar = () => {
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/jobs", label: "Jobs" },
-    { path: "/add-jobs", label: "Post a Job" },
+    { path: "/addJob", label: "Add a Job" },
     { path: "/myApplications", label: "My Applications" },
   ];
 
