@@ -1,61 +1,40 @@
 import { useEffect } from "react";
-import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
-const MyApplications = () => {
-  const { user } = useAuth();
+const MyPostedJob = () => {
   const [jobs, setJobs] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetch(`http://localhost:3000/job-application?email=${user.email}`)
+    fetch(`http://localhost:3000/jobs?email=${user.email}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setJobs(data);
+        console.log(data);
       });
   }, [user.email]);
 
-  const handleDelete = (_id) => {
-    console.log(_id);
-    fetch(`http://localhost:3000/job-application/${_id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.deletedCount > 0) {
-          const remaining = jobs.filter((job) => job._id !== _id);
-          setJobs(remaining);
-        }
-      });
-  };
-
   return (
     <div className="container mx-auto">
-      <h3 className="text-3xl">My applications {jobs.length}</h3>
+      <h3 className="text3-xl">My posted jobs </h3>
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
           <thead>
             <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
+              <th>No.</th>
               <th>Name</th>
-              <th>Job</th>
+              <th>Application Deadline</th>
+              <th>Application Count</th>
               {/* <th>Favorite Color</th> */}
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {jobs.map((job) => (
+            {jobs.map((job, index) => (
               <tr key={job._id}>
-                <th>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </th>
+                <th>{index + 1}</th>
                 <td>
                   <div className="flex items-center gap-3">
                     <div className="avatar">
@@ -73,20 +52,16 @@ const MyApplications = () => {
                   </div>
                 </td>
                 <td>
-                  {job.applicant_email}
+                  {job.applicationDeadline}
                   <br />
                   {/* <span className="badge badge-ghost badge-sm">
                     Desktop Support Technician
                   </span> */}
                 </td>
+                <td>{job?.applicationCount}</td>
                 {/* <td>Purple</td> */}
                 <th>
-                  <button
-                    onClick={() => handleDelete(job._id)}
-                    className="btn btn-sm"
-                  >
-                    Delete
-                  </button>
+                  <button className="btn btn-sm">View applications</button>
                 </th>
               </tr>
             ))}
@@ -97,4 +72,4 @@ const MyApplications = () => {
   );
 };
 
-export default MyApplications;
+export default MyPostedJob;

@@ -1,9 +1,10 @@
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const AddJob = () => {
   const { user } = useAuth();
-  console.log(user);
+  const navigate = useNavigate();
   const jobTypes = [
     { value: "hybrid", label: "Hybrid" },
     { value: "remote", label: "Remote" },
@@ -31,7 +32,6 @@ const AddJob = () => {
     newJob.salaryRange = { min, max, currency };
     newJob.requirements = newJob.requirements.split(",");
     newJob.responsibilities = newJob.responsibilities.split(",");
-    console.log(newJob);
 
     fetch("http://localhost:3000/jobs", {
       method: "POST",
@@ -45,7 +45,7 @@ const AddJob = () => {
         if (data.insertedId) {
           Swal.fire("Success!");
           // formData.reset();
-          // navigate("/myApplications");
+          navigate("/myPostedJobs");
         }
       });
   };
